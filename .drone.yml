@@ -1,0 +1,13 @@
+workspace:
+  base: /root
+
+pipeline:
+  clone_target_repo:
+    image: buildpack-deps:16.04-scm
+    environment:
+      - GH_TOKEN=$$GH_TOKEN
+    commands:
+      - pwd
+      - git --version
+      - git clone https://$GH_TOKEN@github.com/`cat REPOSITORY`.git target
+      - ls target
