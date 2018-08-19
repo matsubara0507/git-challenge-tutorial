@@ -14,6 +14,16 @@ function throw() {
   false
 }
 
+function check-revision-by-file() {
+  set -e
+  FILE_PATH=$3
+  # Prevent to pass removed files
+  REVISION_1=`git rev-parse "$1:$FILE_PATH"` || throw '比較対象が存在しません'
+  REVISION_2=`git rev-parse "$2:$FILE_PATH"` || throw '比較対象が存在しません'
+  diff <(git show $REVISION_1) <(git show $REVISION_2) &> /dev/null || throw "$FILE_PATH が一致しません"
+  echo OK
+}
+
 git fetch
 ANSWER_BRANCH='master'
 if git branch | grep --silent ${ANSWER_BRANCH}; then
@@ -30,5 +40,4 @@ echo OK
 echo -n '正しい変更が反映されている: '
 (git remote | grep "$EXPECTED_REMOTE_NAME" &> /dev/null) || git remote add "$EXPECTED_REMOTE_NAME" "$EXPECTED_REMOTE_URL"
 git fetch "$EXPECTED_REMOTE_NAME" &> /dev/null
-echo OK
-# check-revision-by-file "$EXPECTED_REMOTE_NAME/$ANSWER_BRANCH" "heads/$ANSWER_BRANCH" "$CSV_FILE" || throw NG
+check-revision-by-file "$EXPECTED_REMOTE_NAME/$ANSWER_BRANCH" "heads/$ANSWER_BRANCH" "$CSV_FILE" || throw NG
