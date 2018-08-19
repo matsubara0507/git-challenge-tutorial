@@ -9,5 +9,8 @@ pipeline:
     commands:
       - pwd
       - git --version
-      - git clone https://$GH_TOKEN@github.com/`cat REPOSITORY`.git target
-      - ls target
+      - (ls | grep --silent target) || git clone https://$GH_TOKEN@github.com/`cat REPOSITORY`.git target
+      - cd target && ../verify.bash
+    when:
+      branches:
+        exclude: [ ci ]
