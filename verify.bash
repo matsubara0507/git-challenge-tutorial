@@ -14,16 +14,6 @@ function throw() {
   false
 }
 
-function check-revision-by-file() {
-  set -e
-  FILE_PATH=$3
-  # Prevent to pass removed files
-  REVISION_1=`git rev-parse "$1:$FILE_PATH"` || throw '比較対象が存在しません'
-  REVISION_2=`git rev-parse "$2:$FILE_PATH"` || throw '比較対象が存在しません'
-  diff <(git show $REVISION_1) <(git show $REVISION_2) &> /dev/null || throw "$FILE_PATH が一致しません"
-  echo OK
-}
-
 git fetch
 ANSWER_BRANCH='master'
 if git branch | grep --silent ${ANSWER_BRANCH}; then

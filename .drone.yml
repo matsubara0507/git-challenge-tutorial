@@ -8,7 +8,7 @@ pipeline:
       - GH_TOKEN=$$GH_TOKEN
     commands:
       - pwd
-      - git --version
+      - export PATH=$${PATH}:`pwd`/bin
       - (ls | grep --silent target) || git clone https://$GH_TOKEN@github.com/`cat REPOSITORY`.git target
       - cd target && ../verify.bash
     when:
