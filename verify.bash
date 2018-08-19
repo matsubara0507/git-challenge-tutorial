@@ -6,7 +6,7 @@ EXPECTED_REMOTE_URL=${DRONE_REMOTE_URL}
 EXPECTED_REMOTE_NAME='expected'
 CSV_FILE='users.csv'
 REMOTE_ORIGIN_MASTER_HEAD='1b15331985e1ee2463b7a055bc95be73c9179049'
-ANSWER_BRANCH='answer'
+EXPECTED_ANSWER_BRANCH='answer'
 
 function throw() {
   MESSAGE="$1"
@@ -40,4 +40,4 @@ echo OK
 echo -n '正しい変更が反映されている: '
 (git remote | grep "$EXPECTED_REMOTE_NAME" &> /dev/null) || git remote add "$EXPECTED_REMOTE_NAME" "$EXPECTED_REMOTE_URL"
 git fetch "$EXPECTED_REMOTE_NAME" &> /dev/null
-check-revision-by-file "$EXPECTED_REMOTE_NAME/$ANSWER_BRANCH" "heads/$ANSWER_BRANCH" "$CSV_FILE" || throw NG
+check-revision-by-file "$EXPECTED_REMOTE_NAME/$EXPECTED_ANSWER_BRANCH" "heads/$ANSWER_BRANCH" "$CSV_FILE" || throw NG
