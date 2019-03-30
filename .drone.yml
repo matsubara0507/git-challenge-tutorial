@@ -6,10 +6,11 @@ pipeline:
     image: buildpack-deps:16.04-scm
     environment:
       - GH_TOKEN=$$GH_TOKEN
+      - DRONE_REPO=$$DRONE_REPO
     commands:
       - pwd
       - export PATH=$${PATH}:`pwd`/bin
-      - (ls | grep --silent target) || git clone https://$GH_TOKEN@github.com/`cat REPOSITORY`.git target
+      - rm -rf target && git clone https://$GH_TOKEN@github.com/`cat REPOSITORY`.git target
       - cd target && ../verify.bash
     when:
       branches:
