@@ -1,4 +1,4 @@
-ind: pipeline
+kind: pipeline
 name: default
 
 clone:
