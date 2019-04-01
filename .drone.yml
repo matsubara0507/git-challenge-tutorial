@@ -16,6 +16,6 @@ steps:
   - rm -rf target && git clone https://$GH_TOKEN@github.com/`cat REPOSITORY`.git target
   - cd target && ../verify.bash
   when:
-    branches:
+    branch:
       exclude:
       - ci
