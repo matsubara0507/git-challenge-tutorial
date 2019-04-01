@@ -1,17 +1,21 @@
-workspace:
-  base: /root
+ind: pipeline
+name: default
 
-pipeline:
-  clone_target_repo:
-    image: buildpack-deps:16.04-scm
-    environment:
-      - GH_TOKEN=$$GH_TOKEN
-      - DRONE_REPO=$$DRONE_REPO
-    commands:
-      - pwd
-      - export PATH=$${PATH}:`pwd`/bin
-      - rm -rf target && git clone https://$GH_TOKEN@github.com/`cat REPOSITORY`.git target
-      - cd target && ../verify.bash
-    when:
-      branches:
-        exclude: [ ci ]
+clone:
+  depth: 2
+
+steps:
+- name: check answer
+  image: buildpack-deps:16.04-scm
+  environment:
+    GH_TOKEN:
+      from_secret: github_token
+  commands:
+  - pwd
+  - export PATH=$${PATH}:`pwd`/bin
+  - rm -rf target && git clone https://$GH_TOKEN@github.com/`cat REPOSITORY`.git target
+  - cd target && ../verify.bash
+  when:
+    branches:
+      exclude:
+      - ci
