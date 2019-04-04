@@ -32,3 +32,9 @@ steps:
       {{else}}
         チーム {{build.branch}} の {{repo.name}} は不正解だね...残念！
       {{/success}}
+  when:
+    event:
+    - push
+    branch:
+      exclude:
+      - ci
