@@ -22,6 +22,7 @@ steps:
       exclude:
       - ci
 - name: notify slack
+  image: plugins/slack
   settings:
     webhook:
       from_secret: slack_webhook
