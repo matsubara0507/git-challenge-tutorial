@@ -1,5 +1,10 @@
+---
 kind: pipeline
 name: default
+
+platform:
+  os: linux
+  arch: amd64
 
 clone:
   depth: 2
@@ -7,34 +12,40 @@ clone:
 steps:
 - name: check answer
   image: buildpack-deps:16.04-scm
+  commands:
+  - pwd
+  - "export PATH=$${PATH}:`pwd`/bin"
+  - "rm -rf target && git clone https://$GH_TOKEN@github.com/`cat REPOSITORY`.git target"
+  - "cd target && ../verify.bash"
   environment:
     GH_TOKEN:
       from_secret: github_token
-  commands:
-  - pwd
-  - export PATH=$${PATH}:`pwd`/bin
-  - rm -rf target && git clone https://$GH_TOKEN@github.com/`cat REPOSITORY`.git target
-  - cd target && ../verify.bash
   when:
-    event:
-    - push
     branch:
       exclude:
       - ci
+    event:
+    - push
+
 - name: notify slack
   image: plugins/slack
   settings:
-    webhook:
-      from_secret: slack_webhook
     template: >
       {{#success build.status}}
         チーム {{build.branch}} が {{repo.name}} を正解したみたいだよ！すごーい！！
       {{else}}
         チーム {{build.branch}} の {{repo.name}} は不正解だね...残念！
       {{/success}}
+    webhook:
+      from_secret: slack_webhook
   when:
-    event:
-    - push
     branch:
       exclude:
       - ci
+    event:
+    - push
+    status:
+    - success
+    - failure
+
+...
