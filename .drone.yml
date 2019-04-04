@@ -26,3 +26,9 @@ steps:
   settings:
     webhook:
       from_secret: slack_webhook
+    template: >
+      {{#success build.status}}
+        チーム {{build.branch}} が {{repo.name}} を正解したみたいだよ！すごーい！！
+      {{else}}
+        チーム {{build.branch}} の {{repo.name}} は不正解だね...残念！
+      {{/success}}
