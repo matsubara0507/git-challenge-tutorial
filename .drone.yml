@@ -51,10 +51,10 @@ steps:
       {{else}}
         {{repo.name}} は不正解だね...残念！
       {{/success}}
-    slack_token:
+    token:
       from_secret: slack_token
     channel: bot-test
-    step_num: 2
+    step_number: 2
     drone_host:
       from_secret: drone_host
     drone_token:
