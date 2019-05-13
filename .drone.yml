@@ -53,7 +53,7 @@ steps:
       {{/success}}
     token:
       from_secret: slack_token
-    channel: team-{{repo.name}}-11
+    channel: team-{{build.branch}}-11
     step_number: 2
     drone_host:
       from_secret: drone_host
